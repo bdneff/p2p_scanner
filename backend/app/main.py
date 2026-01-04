@@ -1,3 +1,4 @@
+from .config import POLL_SECONDS
 from fastapi import FastAPI
 from apscheduler.schedulers.background import BackgroundScheduler
 from .db import Base, engine, SessionLocal
@@ -8,17 +9,27 @@ Base.metadata.create_all(bind=engine)
 
 scheduler = BackgroundScheduler()
 
+
 def _poll():
+    print("poll tick")
     db = SessionLocal()
     try:
-        poll_once(db)
+        n = poll_once(db)
+        print("ingested", n)
     finally:
         db.close()
+
+#def _poll():
+#    db = SessionLocal()
+#    try:
+#        poll_once(db)
+#    finally:
+#        db.close()
 
 @app.on_event("startup")
 def startup():
     _poll()
-    scheduler.add_job(_poll, "interval", seconds=10)
+    scheduler.add_job(_poll, "interval", seconds=POLL_SECONDS, id="poller", replace_existing=True)
     scheduler.start()
 
 @app.get("/top")
