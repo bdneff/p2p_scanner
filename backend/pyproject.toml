@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "p2p-bet-scanner"
+version = "0.1.0"
+description = "Odds-aware unusual flow scanner (MVP)"
+authors = ["Brandon Neff"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.0"
+uvicorn = "^0.30.0"
+pydantic = "^2.7.0"
+sqlalchemy = "^2.0.0"
+apscheduler = "^3.10.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
